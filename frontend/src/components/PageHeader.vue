@@ -8,12 +8,12 @@
       <section class="col-2">
         <img src="../assets/logo.png"  class="img-fluid"  alt="logo"/>
       </section>
-      <section class="col">
-        <p class="pt-2">
+      <section class="col ">
+        <p class="pt-2 fs-4">
           г.Чернушка, Банковский пер., 7
         </p>
         <section class="row justify-content-between">
-          <section class="col-3">
+          <section class="col-3 fs-4">
             +7 (666) 666 66-66
           </section>
           <section class="col-3 text-end">
