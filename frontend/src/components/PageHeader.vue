@@ -3,10 +3,11 @@
 </script>
 
 <template>
-  <header class="container">
+  <header>
     <section class="row justify-content-between">
       <section class="col-2">
-        <img src="../assets/logo.png"  class="img-fluid"  alt="logo"/>
+          <img src="../assets/logo.png"  class="img-fluid"  alt="logo"
+               @click="this.$router.push({ name: 'index' })"/>
       </section>
       <section class="col ">
         <p class="pt-2 fs-4">
@@ -23,18 +24,22 @@
         </section>
         <hr />
         <nav class="container ps-0 pe-0">
-          <button type="button" class="btn btn-light col-3 border border-1">
-            <a>О кафе</a>
-          </button>
-          <button type="button" class="btn btn-light col-3 border border-1">
-            <a>Меню</a>
-          </button>
-          <button type="button" class="btn btn-light col-3 border border-1">
-            <a>Контакты</a>
-          </button>
-          <button type="button" class="btn btn-light col-3 border border-1">
-            <a>Вакансии</a>
-          </button>
+            <button type="button" class="btn btn-light col-3 border border-1"
+                    @click="this.$router.push({ name: 'index' })">
+              О кафе
+            </button>
+            <button type="button" class="btn btn-light col-3 border border-1"
+                    @click="this.$router.push({ name: 'menu' })">
+              Меню
+            </button>
+            <button type="button" class="btn btn-light col-3 border border-1"
+                    @click="this.$router.push({ name: 'contacts' })">
+              Контакты
+            </button>
+            <button type="button" class="btn btn-light col-3 border border-1"
+                    @click="this.$router.push({ name: 'vacations' })">
+              <a>Вакансии</a>
+            </button>
         </nav>
       </section>
     </section>

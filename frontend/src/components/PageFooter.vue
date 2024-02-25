@@ -1,9 +1,10 @@
 <script setup>
-
+import telegram from '@/assets/telegram.png?url'
+import vk from '@/assets/vk.png?url'
 </script>
 
 <template>
-<section class="container bg-secondary text-white mb-0 px-4 pb-2 pt-3 fs-6">
+<section class="bg-secondary text-white mb-0 px-4 pb-2 pt-3 fs-6">
   <section class="row row-cols-2">
     <section class="col">
       Tastly - кафе, которое вы заслуживаете
@@ -15,8 +16,8 @@
       </section>
     </section>
   </section>
-  <img alt="telegram" src="/src/assets/telegram.png" class="img-fluid"/>
-  <img alt="vk" src="/src/assets/vk.png" class="img-fluid"/>
+  <img alt="telegram" :src="telegram" class="img-fluid"/>
+  <img alt="vk" :src="vk" class="img-fluid"/>
   <p class="text-center p-0 m-0">
     2024 &copy; Кафе Tastly 2024
   </p>
