@@ -3,9 +3,9 @@ import PageHeader from '@/components/PageHeader.vue'
 import PageFooter from "@/components/PageFooter.vue";
 </script>
 
-<template>
+<template >
   <PageHeader />
-  <router-view> </router-view>
+    <router-view> </router-view>
   <PageFooter/>
 </template>
 

@@ -18,7 +18,8 @@
             +7 (666) 666 66-66
           </section>
           <section class="col-3 text-end">
-              <img src="../assets/user.png"  class="img-fluid me-5" alt="user">
+              <img src="../assets/user.png"  class="img-fluid me-5" alt="user"
+                   @click="this.$router.push({ name: 'registration' })">
               <img src="../assets/bag.png"  class="img-fluid" alt="bag"/>
           </section>
         </section>

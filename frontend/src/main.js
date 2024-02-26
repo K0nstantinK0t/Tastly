@@ -16,6 +16,25 @@ const routes = [
         component: () => import('./views/PageContacts.vue')
 
     },
+    {
+        path: '/menu',
+        name: 'menu',
+        component: () => import('./views/PageMenu.vue')
+
+    },
+    {
+        path: '/vacations',
+        name: 'vacations',
+        component: () => import('./views/PageVacations.vue')
+
+    },
+
+    {
+        path: '/registration',
+        name: 'registration',
+        component: () => import('./views/PageRegistration.vue')
+
+    },
 ]
 
 const router = VueRouter.createRouter({
