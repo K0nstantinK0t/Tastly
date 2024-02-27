@@ -2,25 +2,37 @@
 // import config from "@/config.js";
 import {ref} from "vue";
 
-let errors = []
+const errors = ref([])
 const name = ref('')
 const email = ref('')
 const number = ref('')
 const password = ref('')
 const passwordRepeat = ref('')
 
-function submitRegistrationForm() {
+function submitRegistrationForm(emit) {
   if (name.value && email.value && password.value && passwordRepeat.value) {
-
-    console.log('пздц')
-    return true
+    if(checkPasswordEqual(password.value, passwordRepeat.value, emit))
+      return true
   } else {
     {
-      errors.push("Все поля должны быть заполнены")
-      console.log(errors)
-      return false
+      errors.value = []
+      errors.value.push("Все поля должны быть заполнены")
+      emit.preventDefault();
     }
   }
+  return false
+}
+function checkPasswordEqual(InputPassword, InputRepeatPassword, emit){
+  if(InputPassword==InputRepeatPassword)
+  {
+    console.log('zbc')
+    return true;
+  }
+  console.log('pzdc')
+  errors.value = []
+  errors.value.push("Пароли должны совпадать")
+  emit.preventDefault();
+  return false
 }
 </script>
 
@@ -31,9 +43,14 @@ function submitRegistrationForm() {
   <section class="container bg-secondary-subtle text-center my-3 py-3">
     <section class="row row-cols-3">
       <section class="col"></section>
-      <form class="col text-center" @submit="submitRegistrationForm">
-<!--            :action="config.serverUrl"-->
-<!--            method="post">-->
+      <form class="col text-center" @submit="submitRegistrationForm"
+            :action="config.serverUrl"
+            method="post">
+        <div class="alert alert-danger" role="alert" v-if="errors.length">
+          <p v-for="error in errors">
+              {{ error }}
+          </p>
+        </div>
         <label for="name">
           Имя:
         </label>
