@@ -1,8 +1,11 @@
 <script setup>
-// import config from "@/config.js";
 import {ref} from "vue";
+import config from "@/config.js"
+import axios from "axios";
+import {getCurrentInstance} from "vue";
+import {store} from "@/store.js";
 
-const errors = ref([])
+const instance = getCurrentInstance()
 const name = ref('')
 const email = ref('')
 const number = ref('')
@@ -10,27 +13,39 @@ const password = ref('')
 const passwordRepeat = ref('')
 
 function submitRegistrationForm(emit) {
-  if (name.value && email.value && password.value && passwordRepeat.value) {
-    if(checkPasswordEqual(password.value, passwordRepeat.value, emit))
-      return true
+  store.errors = []
+  if (name.value && email.value && password.value && passwordRepeat.value
+      && number.value) {
+    checkPasswordEqual(password.value, passwordRepeat.value, emit)
+    axios.post(config.registrationUrl, {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      "phone_number": number.value,
+    }).catch((error) => {
+      for (let i in error.response.data.errors)
+        store.errors.push(error.response.data.errors[i][0])
+      console.log(store.errors)
+      // rerender errors block
+      console.log(instance)
+      instance?.proxy?.$forceUpdate();
+    })
+    emit.preventDefault();
+    return true
   } else {
     {
-      errors.value = []
-      errors.value.push("Все поля должны быть заполнены")
+      store.errors.push("Все поля должны быть заполнены")
       emit.preventDefault();
     }
   }
   return false
 }
-function checkPasswordEqual(InputPassword, InputRepeatPassword, emit){
-  if(InputPassword==InputRepeatPassword)
-  {
-    console.log('zbc')
+
+function checkPasswordEqual(InputPassword, InputRepeatPassword, emit) {
+  if (InputPassword === InputRepeatPassword) {
     return true;
   }
-  console.log('pzdc')
-  errors.value = []
-  errors.value.push("Пароли должны совпадать")
+  store.errors.push("Пароли должны совпадать")
   emit.preventDefault();
   return false
 }
@@ -44,44 +59,44 @@ function checkPasswordEqual(InputPassword, InputRepeatPassword, emit){
     <section class="row row-cols-3">
       <section class="col"></section>
       <form class="col text-center" @submit="submitRegistrationForm"
-            :action="config.serverUrl"
+            action="#"
             method="post">
-        <div class="alert alert-danger" role="alert" v-if="errors.length">
-          <p v-for="error in errors">
-              {{ error }}
+        <div class="alert alert-danger" role="alert" v-if="store.errors.length">
+          <p v-for="error in store.errors">
+            {{ error }}
           </p>
         </div>
         <label for="name">
           Имя:
         </label>
-        <br />
-        <input type="text" id="name"  class="form-control"
+        <br/>
+        <input type="text" id="name" class="form-control"
                placeholder="Введите имя" name="fio" v-model="name"/>
         <label for="email">
           Электронная почта:
         </label>
-        <br />
+        <br/>
         <input name="email" type="text" id="email"
                class="form-control" placeholder="Введите адрес  электронной почты"
                v-model="email"/>
         <label for="number">
           Номер телефона:
         </label>
-        <br />
+        <br/>
         <input name="number" type="text" id="number"
                class="form-control" placeholder="Введите номер телефона"
                v-model="number"/>
         <label for="password">
           Пароль:
         </label>
-        <br />
+        <br/>
         <input name="password" type="password" id="password"
                class="form-control" placeholder="Введите пароль"
                v-model="password"/>
         <label for="password-repeat">
           Пароль ещё раз:
         </label>
-        <br />
+        <br/>
         <input name="passwordRepeat" type="password" id="password-repeat"
                class="form-control" placeholder="Повторите пароль"
                v-model="passwordRepeat"/>
