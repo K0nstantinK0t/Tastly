@@ -35,6 +35,16 @@ const routes = [
         component: () => import('./views/PageRegistration.vue')
 
     },
+    {
+        path: '/authentification',
+        name: 'auth',
+        component: () => import('./views/PageAuth.vue')
+    },
+    {
+        path: '/pc',
+        name: 'pc',
+        component: () => import('./views/PersonCabinet.vue')
+    }
 ]
 
 const router = VueRouter.createRouter({

@@ -1,11 +1,13 @@
 <script setup>
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import config from "@/config.js"
 import axios from "axios";
-import {getCurrentInstance} from "vue";
-import {store} from "@/store.js";
+import store from "@/store.js";
+import {useRouter} from 'vue-router'
 
-const instance = getCurrentInstance()
+
+const router = useRouter()
+const errors = reactive([])
 const name = ref('')
 const email = ref('')
 const number = ref('')
@@ -13,7 +15,7 @@ const password = ref('')
 const passwordRepeat = ref('')
 
 function submitRegistrationForm(emit) {
-  store.errors = []
+  errors.length = 0
   if (name.value && email.value && password.value && passwordRepeat.value
       && number.value) {
     checkPasswordEqual(password.value, passwordRepeat.value, emit)
@@ -22,22 +24,24 @@ function submitRegistrationForm(emit) {
       email: email.value,
       password: password.value,
       "phone_number": number.value,
-    }).catch((error) => {
-      for (let i in error.response.data.errors)
-        store.errors.push(error.response.data.errors[i][0])
-      console.log(store.errors)
-      // rerender errors block
-      console.log(instance)
-      instance?.proxy?.$forceUpdate();
+    }).then((response)=> store.token=response.data.token)
+        .catch((error) => {
+          console.log('error')
+        for (let i in error.response.data.errors)
+          errors.push(error.response.data.errors[i][0])
     })
-    emit.preventDefault();
-    return true
+    emit.preventDefault()
+    if(!errors.length){
+      router.push({ name: 'pc' })
+      return true
+    }
   } else {
     {
-      store.errors.push("Все поля должны быть заполнены")
+      errors.push("Все поля должны быть заполнены")
       emit.preventDefault();
     }
   }
+  console.log(errors)
   return false
 }
 
@@ -45,7 +49,7 @@ function checkPasswordEqual(InputPassword, InputRepeatPassword, emit) {
   if (InputPassword === InputRepeatPassword) {
     return true;
   }
-  store.errors.push("Пароли должны совпадать")
+  errors.push("Пароли должны совпадать")
   emit.preventDefault();
   return false
 }
@@ -61,8 +65,8 @@ function checkPasswordEqual(InputPassword, InputRepeatPassword, emit) {
       <form class="col text-center" @submit="submitRegistrationForm"
             action="#"
             method="post">
-        <div class="alert alert-danger" role="alert" v-if="store.errors.length">
-          <p v-for="error in store.errors">
+        <div class="alert alert-danger" role="alert" v-if="errors.length">
+          <p v-for="error in errors">
             {{ error }}
           </p>
         </div>
@@ -103,7 +107,7 @@ function checkPasswordEqual(InputPassword, InputRepeatPassword, emit) {
         <button type="submit" class="btn btn-primary mt-2">Зарегистрироваться</button>
       </form>
     </section>
-
+    <router-link :to="{name: 'auth'}" >Уже есть аккаунт? Авторизоваться</router-link>
     <section class="col"></section>
   </section>
 </template>
