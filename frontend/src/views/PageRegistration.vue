@@ -4,7 +4,7 @@ import config from "@/config.js"
 import axios from "axios";
 import store from "@/store.js";
 import {useRouter} from 'vue-router'
-
+import nav from "@/Modules/nav.js";
 
 const router = useRouter()
 const errors = reactive([])
@@ -14,32 +14,36 @@ const number = ref('')
 const password = ref('')
 const passwordRepeat = ref('')
 
-function submitRegistrationForm(emit) {
+async function submitRegistrationForm(emit) {
+  emit.preventDefault()
   errors.length = 0
   if (name.value && email.value && password.value && passwordRepeat.value
       && number.value) {
     checkPasswordEqual(password.value, passwordRepeat.value, emit)
-    axios.post(config.registrationUrl, {
+    await axios.post(config.registrationUrl, {
       name: name.value,
       email: email.value,
       password: password.value,
       "phone_number": number.value,
-    }).then((response)=> store.token=response.data.token)
+    })
         .catch((error) => {
           console.log('error')
-        for (let i in error.response.data.errors)
-          errors.push(error.response.data.errors[i][0])
-    })
-    emit.preventDefault()
-    if(!errors.length){
-      router.push({ name: 'pc' })
-      return true
-    }
+          for (let i in error.response.data.errors)
+            errors.push(error.response.data.errors[i][0])
+          return false
+        })
+        .then(function (response) {
+          store.token = response.data.token
+          store.role = response.data.role
+          console.log(response.data)
+          if (!errors.length) {
+            nav.goToUserCabinet(router)
+            return true
+
+          }
+        })
   } else {
-    {
-      errors.push("Все поля должны быть заполнены")
-      emit.preventDefault();
-    }
+    errors.push("Все поля должны быть заполнены")
   }
   console.log(errors)
   return false
@@ -62,9 +66,7 @@ function checkPasswordEqual(InputPassword, InputRepeatPassword, emit) {
   <section class="container bg-secondary-subtle text-center my-3 py-3">
     <section class="row row-cols-3">
       <section class="col"></section>
-      <form class="col text-center" @submit="submitRegistrationForm"
-            action="#"
-            method="post">
+      <form class="col text-center" @submit="submitRegistrationForm">
         <div class="alert alert-danger" role="alert" v-if="errors.length">
           <p v-for="error in errors">
             {{ error }}

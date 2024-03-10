@@ -3,6 +3,16 @@ import * as bootstrap from 'bootstrap'
 import * as VueRouter from 'vue-router'
 import { createApp } from 'vue'
 import App from './App.vue'
+import axios from "axios";
+import store from "@/store.js";
+
+
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+axios.defaults.headers.common['Authorization'] = `bearer ${store.token}`
+axios.defaults.headers.common['Accept'] = 'application/json'
+axios.get('http://api.tastly.com/sanctum/csrf-cookie').then((response)=>console.log(response))
+// TODO: додедать работу с токенами куки
 
 const routes = [
     {
@@ -44,6 +54,11 @@ const routes = [
         path: '/pc',
         name: 'pc',
         component: () => import('./views/PersonCabinet.vue')
+    },
+    {
+        path:'/adminPanel',
+        name: 'adminPanel',
+        component: () => import('./views/AdminPanel.vue')
     }
 ]
 

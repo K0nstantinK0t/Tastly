@@ -26,7 +26,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'unique:users'],
             'phone_number' => ['required', 'string']
         ]);
 
@@ -37,12 +37,13 @@ class AuthController extends Controller
         $input = $request->all();
         //  password hashing
         $input['password'] = bcrypt($input['password']);
+        $input['role'] = 'user';
         // create a new user
         $user = User::create($input);
         // create token
         $token = $user->createToken($user->email)->plainTextToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json(['token' => $token, 'role' => $user->role], 200);
     }
 
     /**
@@ -70,7 +71,9 @@ class AuthController extends Controller
             return response()->json(['errors' => 'The provided credentials are incorrect.'], 401);
 
         // return generated token
-        return response()->json(['token' => $user->createToken($user->email)->plainTextToken], 200);
+        return response()->json([
+            'token' => $user->createToken($user->email)->plainTextToken, 'role'
+             => $user->role], 200);
     }
 
     /**

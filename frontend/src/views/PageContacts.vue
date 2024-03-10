@@ -3,6 +3,7 @@
 </script>
 
 <template>
+  <h3 class="text-center my-5">Здесь пока ничего нет.</h3>
   <section class="bg-secondary-subtle text-center my-3 py-3 mx-0">
     <p class="fst-italic fs-4 w-50 mx-auto">
       Диркетор :

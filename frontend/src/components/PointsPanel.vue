@@ -2,39 +2,29 @@
 import {reactive, ref} from "vue";
 import config from "@/config.js"
 import axios from "axios";
-import store from "@/store.js";
-import {useRouter} from 'vue-router'
-import nav from "@/Modules/nav.js";
 
-
-const router = useRouter()
 const errors = reactive([])
-const email = ref('')
-const password = ref('')
+const phone = ref('')
+const sum = ref('')
+const status = reactive([])
 
 function submitRegistrationForm(emit) {
+
   emit.preventDefault();
   errors.length = 0
-  if (password.value && email.value) {
-    axios.post(config.authUrl, {
-      email: email.value,
-      password: password.value,
+  if (phone.value && sum.value) {
+    axios.post(config.addPointsUrl, {
+      phone: phone.value,
+      sum: sum.value,
     },{
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
+    }).then(function (response) {
+      status.push(response.data.message)
     }).catch((error) => {
-      console.log(error)
-      console.log('ВСЕ ПЛОХО')
       for (let i in error.response.data.errors)
         errors.push(error.response.data.errors[i][0])
-      return false
-    }).then(function (response) {
-      store.token = response.data.token
-      store.role = response.data.role
-      console.log(response.data)
-      console.log(store.token)
-      nav.goToUserCabinet(router)
     })
   } else {
     {
@@ -46,9 +36,6 @@ function submitRegistrationForm(emit) {
 </script>
 
 <template>
-  <h4 class="text-center fs-3 fw-bold my-5">
-    Авторизация
-  </h4>
   <section class="container bg-secondary-subtle text-center my-3 py-3">
     <section class="row row-cols-3">
       <section class="col"></section>
@@ -60,21 +47,26 @@ function submitRegistrationForm(emit) {
             {{ error }}
           </p>
         </div>
+        <div class="alert alert-primary" role="alert" v-if="status.length">
+          <p v-for="message in status">
+            {{ message }}
+          </p>
+        </div>
         <label for="email">
-          Почта:
+          Телефон покупателя:
         </label>
         <br/>
-        <input type="text" id="email" class="form-control"
-               placeholder="Введите имя" name="email" v-model="email"/>
+        <input type="text" id="phone" class="form-control"
+               placeholder="Введите телефон покупателя" name="email" v-model="phone"/>
         <br/>
         <label for="password">
-          Пароль:
+          Сумма покупки:
         </label>
         <br/>
-        <input name="password" type="password" id="password"
-               class="form-control" placeholder="Введите пароль"
-               v-model="password"/>
-        <button type="submit" class="btn btn-primary mt-2">Войти в аккаунт</button>
+        <input name="sum" type="text" id="sum"
+               class="form-control" placeholder="Введите сумму покупки"
+               v-model="sum"/>
+        <button type="submit" class="btn btn-primary mt-2">Подтвердить покупку</button>
       </form>
     </section>
     <section class="col"></section>

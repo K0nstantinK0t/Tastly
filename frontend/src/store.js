@@ -2,5 +2,6 @@
 import { reactive } from 'vue'
 
 export default reactive({
-    token: null,
+    token: "",
+    role: 'guest',
 })
