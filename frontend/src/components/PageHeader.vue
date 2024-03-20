@@ -47,7 +47,7 @@ const router = useRouter()
               О кафе
             </button>
             <button type="button" class="btn btn-light col-3 border border-1"
-                    @click="router.push({ name: 'menu' })">
+                    @click="nav.goToMenu(router)">
               Меню
             </button>
             <button type="button" class="btn btn-light col-3 border border-1"

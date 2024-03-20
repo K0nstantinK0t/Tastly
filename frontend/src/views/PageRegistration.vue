@@ -67,11 +67,11 @@ function checkPasswordEqual(InputPassword, InputRepeatPassword, emit) {
     <section class="row row-cols-3">
       <section class="col"></section>
       <form class="col text-center" @submit="submitRegistrationForm">
-        <div class="alert alert-danger" role="alert" v-if="errors.length">
+        <section class="alert alert-danger" role="alert" v-if="errors.length">
           <p v-for="error in errors">
             {{ error }}
           </p>
-        </div>
+        </section>
         <label for="name">
           Имя:
         </label>

@@ -27,7 +27,6 @@ class PointsController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 401);
         }
-//        $points = $request->sum / 100 * config('business.cashback');
         $points = $request->sum / 100 * config('business.cashback');
         $user = User::where('phone_number', $request->phone)->first();
         $user->points = $user->points + $points;

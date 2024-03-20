@@ -12,7 +12,6 @@ axios.defaults.withXSRFToken = true;
 axios.defaults.headers.common['Authorization'] = `bearer ${store.token}`
 axios.defaults.headers.common['Accept'] = 'application/json'
 axios.get('http://api.tastly.com/sanctum/csrf-cookie').then((response)=>console.log(response))
-// TODO: додедать работу с токенами куки
 
 const routes = [
     {
@@ -59,7 +58,12 @@ const routes = [
         path:'/adminPanel',
         name: 'adminPanel',
         component: () => import('./views/AdminPanel.vue')
-    }
+    },
+    {
+        path: '/adminMenu',
+        name: 'adminMenu',
+        component: () => import('./views/AdminMenu.vue')
+    },
 ]
 
 const router = VueRouter.createRouter({
